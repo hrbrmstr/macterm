@@ -83,6 +83,12 @@ targets:
         ENABLE_HARDENED_RUNTIME: YES
         OTHER_LDFLAGS:
           - "-lc++"
+        # Silence "umbrella header does not include header" warnings emitted
+        # when Clang imports the GhosttyKit module — ghostty.h doesn't list
+        # the vt/* sub-headers, and we can't modify the prebuilt xcframework.
+        OTHER_SWIFT_FLAGS:
+          - "-Xcc"
+          - "-Wno-incomplete-umbrella"
     dependencies:
       - framework: GhosttyKit.xcframework
         embed: false
