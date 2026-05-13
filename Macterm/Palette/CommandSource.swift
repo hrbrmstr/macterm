@@ -58,6 +58,10 @@ struct CommandSource: PaletteSource {
         case .recentTab:
             guard let projectID else { return nil }
             action = { ctx.appState.cycleRecentTab(projectID: projectID) }
+        case .renameTab:
+            guard let projectID,
+                  let tab = ctx.appState.workspaces[projectID]?.activeTab else { return nil }
+            action = { ctx.appState.renamingTabID = tab.id }
         case .splitRight:
             guard let projectID else { return nil }
             action = { ctx.appState.splitPane(direction: .horizontal, projectID: projectID) }

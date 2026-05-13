@@ -52,9 +52,9 @@ struct MainWindow: View {
         .onChange(of: appState.isCommandPaletteVisible) { _, visible in
             // When the palette closes, hand first responder back to the focused
             // terminal view so typing resumes without requiring a mouse click.
-            if !visible {
-                DispatchQueue.main.async { restoreFocusToActivePane() }
-            }
+            // Skip when a tab rename was triggered — the sidebar TextField takes focus instead.
+            guard !visible, appState.renamingTabID == nil else { return }
+            DispatchQueue.main.async { restoreFocusToActivePane() }
         }
     }
 

@@ -28,6 +28,9 @@ struct SidebarContent: View {
                     ForEach(tabs) { tab in
                         SidebarTabRow(tab: tab) {
                             appState.closeTab(tab.id, projectID: project.id)
+                        } onRename: { newName in
+                            tab.customTitle = newName
+                            appState.saveWorkspaces()
                         }
                         .tag(SidebarItem.tab(projectID: project.id, tabID: tab.id))
                     }
@@ -172,16 +175,51 @@ private struct SidebarProjectRow: View {
 private struct SidebarTabRow: View {
     let tab: TerminalTab
     let onClose: () -> Void
+    let onRename: (String) -> Void
+    @Environment(AppState.self)
+    private var appState
+    @State
+    private var isRenaming = false
+    @State
+    private var renameText = ""
+    @FocusState
+    private var focused: Bool
 
     var body: some View {
         Label {
-            Text(tab.sidebarTitle)
-                .lineLimit(1)
+            if isRenaming {
+                TextField("", text: $renameText)
+                    .textFieldStyle(.plain)
+                    .focused($focused)
+                    .onSubmit { commit() }
+                    .onExitCommand { isRenaming = false }
+            } else {
+                Text(tab.sidebarTitle)
+                    .lineLimit(1)
+            }
         } icon: {
             Image(systemName: "terminal")
         }
         .contextMenu {
+            Button("Rename Tab") { beginRename() }
+            Divider()
             Button("Close Tab", action: onClose)
         }
+        .onChange(of: appState.renamingTabID) { _, id in
+            if id == tab.id { beginRename() }
+        }
+    }
+
+    private func beginRename() {
+        appState.renamingTabID = nil
+        renameText = tab.customTitle ?? tab.sidebarTitle
+        isRenaming = true
+        focused = true
+    }
+
+    private func commit() {
+        let text = renameText.trimmingCharacters(in: .whitespaces)
+        if !text.isEmpty { onRename(text) }
+        isRenaming = false
     }
 }
