@@ -126,6 +126,8 @@ private struct SidebarProjectRow: View {
     let onNewTab: () -> Void
     let onRename: (String) -> Void
     let onRemove: () -> Void
+    @Environment(AppState.self)
+    private var appState
     @State
     private var isRenaming = false
     @State
@@ -155,14 +157,20 @@ private struct SidebarProjectRow: View {
                 NSPasteboard.general.setString(project.path, forType: .string)
             }
             Divider()
-            Button("Rename Project") {
-                renameText = project.name
-                isRenaming = true
-                focused = true
-            }
+            Button("Rename Project") { beginRename() }
             Divider()
             Button("Remove Project", role: .destructive, action: onRemove)
         }
+        .onChange(of: appState.renamingProjectID) { _, id in
+            if id == project.id { beginRename() }
+        }
+    }
+
+    private func beginRename() {
+        appState.renamingProjectID = nil
+        renameText = project.name
+        isRenaming = true
+        focused = true
     }
 
     private func commit() {

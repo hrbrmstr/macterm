@@ -11,7 +11,9 @@ final class AppState {
     var sidebarVisible = true
     var pendingClosePane: PendingClosePane?
     var isCommandPaletteVisible = false
+    var postPaletteAction: (() -> Void)?
     var renamingTabID: UUID?
+    var renamingProjectID: UUID?
     private(set) var hasRestoredSelection = false
 
     /// Most-recent-first stack of project IDs. Persisted to UserDefaults.

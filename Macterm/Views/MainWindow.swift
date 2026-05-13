@@ -50,11 +50,15 @@ struct MainWindow: View {
             columnVisibility = visible ? .automatic : .detailOnly
         }
         .onChange(of: appState.isCommandPaletteVisible) { _, visible in
-            // When the palette closes, hand first responder back to the focused
-            // terminal view so typing resumes without requiring a mouse click.
-            // Skip when a tab rename was triggered — the sidebar TextField takes focus instead.
-            guard !visible, appState.renamingTabID == nil else { return }
-            DispatchQueue.main.async { restoreFocusToActivePane() }
+            guard !visible else { return }
+            // Run a post-dismiss action if one was registered, otherwise return
+            // focus to the active terminal pane so typing resumes immediately.
+            if let action = appState.postPaletteAction {
+                appState.postPaletteAction = nil
+                DispatchQueue.main.async { action() }
+            } else {
+                DispatchQueue.main.async { restoreFocusToActivePane() }
+            }
         }
     }
 
