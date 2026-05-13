@@ -142,7 +142,7 @@ private struct SidebarProjectRow: View {
                     .textFieldStyle(.plain)
                     .focused($focused)
                     .onSubmit { commit() }
-                    .onExitCommand { isRenaming = false }
+                    .onExitCommand { cancelRename() }
             } else {
                 Text(project.name)
                     .lineLimit(1)
@@ -177,6 +177,12 @@ private struct SidebarProjectRow: View {
         let text = renameText.trimmingCharacters(in: .whitespaces)
         if !text.isEmpty { onRename(text) }
         isRenaming = false
+        appState.restoreFocusToActivePane()
+    }
+
+    private func cancelRename() {
+        isRenaming = false
+        appState.restoreFocusToActivePane()
     }
 }
 
@@ -200,7 +206,7 @@ private struct SidebarTabRow: View {
                     .textFieldStyle(.plain)
                     .focused($focused)
                     .onSubmit { commit() }
-                    .onExitCommand { isRenaming = false }
+                    .onExitCommand { cancelRename() }
             } else {
                 Text(tab.sidebarTitle)
                     .lineLimit(1)
@@ -229,5 +235,11 @@ private struct SidebarTabRow: View {
         let text = renameText.trimmingCharacters(in: .whitespaces)
         if !text.isEmpty { onRename(text) }
         isRenaming = false
+        appState.restoreFocusToActivePane()
+    }
+
+    private func cancelRename() {
+        isRenaming = false
+        appState.restoreFocusToActivePane()
     }
 }

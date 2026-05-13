@@ -309,6 +309,20 @@ final class AppState {
         selectProject(project)
     }
 
+    // MARK: - Focus
+
+    func restoreFocusToActivePane() {
+        guard let projectID = activeProjectID,
+              let tab = workspaces[projectID]?.activeTab,
+              let paneID = tab.focusedPaneID
+        else { return }
+        FocusRestoration.restoreFocus(
+            to: paneID,
+            in: tab.splitRoot,
+            window: NSApp.keyWindow ?? NSApp.mainWindow
+        )
+    }
+
     // MARK: - Private
 
     private func ensureWorkspace(projectID: UUID, path: String) {

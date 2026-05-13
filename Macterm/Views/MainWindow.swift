@@ -57,7 +57,7 @@ struct MainWindow: View {
                 appState.postPaletteAction = nil
                 DispatchQueue.main.async { action() }
             } else {
-                DispatchQueue.main.async { restoreFocusToActivePane() }
+                DispatchQueue.main.async { appState.restoreFocusToActivePane() }
             }
         }
     }
@@ -74,18 +74,6 @@ struct MainWindow: View {
 
     private func projectHasAnyTab(_ project: Project) -> Bool {
         !(appState.workspaces[project.id]?.tabs.isEmpty ?? true)
-    }
-
-    private func restoreFocusToActivePane() {
-        guard let projectID = appState.activeProjectID,
-              let tab = appState.workspaces[projectID]?.activeTab,
-              let paneID = tab.focusedPaneID
-        else { return }
-        FocusRestoration.restoreFocus(
-            to: paneID,
-            in: tab.splitRoot,
-            window: NSApp.keyWindow ?? NSApp.mainWindow
-        )
     }
 
     private var activeTabTitle: String {
