@@ -331,8 +331,14 @@ private struct QuickTerminalView: View {
     @Bindable var state: QuickTerminalSplitState
 
     var body: some View {
+        let renderedNode: SplitNode = {
+            if let zoomID = state.tab.zoomedPaneID, let pane = state.splitRoot.findPane(id: zoomID) {
+                return .pane(pane)
+            }
+            return state.splitRoot
+        }()
         SplitTreeView(
-            node: state.splitRoot,
+            node: renderedNode,
             focusedPaneID: state.focusedPaneID,
             isActiveProject: true,
             projectID: Self.projectID,
@@ -340,7 +346,7 @@ private struct QuickTerminalView: View {
             onSplit: { paneID, dir in state.split(paneID: paneID, direction: dir) },
             onClosePane: { state.closePane($0) }
         )
-        .id(state.splitRoot.id)
+        .id(renderedNode.id)
         .background(Color(nsColor: GhosttyApp.shared.backgroundColor))
     }
 }

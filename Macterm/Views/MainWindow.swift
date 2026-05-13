@@ -187,8 +187,14 @@ struct WorkspaceView: View {
 
     var body: some View {
         if let ws = appState.workspaces[project.id], let tab = ws.activeTab {
+            let renderedNode: SplitNode = {
+                if let zoomID = tab.zoomedPaneID, let pane = tab.splitRoot.findPane(id: zoomID) {
+                    return .pane(pane)
+                }
+                return tab.splitRoot
+            }()
             SplitTreeView(
-                node: tab.splitRoot,
+                node: renderedNode,
                 focusedPaneID: tab.focusedPaneID,
                 isActiveProject: true,
                 projectID: project.id,
@@ -199,7 +205,7 @@ struct WorkspaceView: View {
                 },
                 onClosePane: { appState.requestClosePane($0, projectID: project.id) }
             )
-            .id(tab.splitRoot.id)
+            .id(renderedNode.id)
         }
     }
 }
