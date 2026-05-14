@@ -59,7 +59,10 @@ struct SidebarContent: View {
         }
         .listStyle(.sidebar)
         .scrollContentBackground(.hidden)
-        .background(MactermTheme.bgWithOpacity)
+        // No background here: the window's NSWindow.backgroundColor (set by
+        // WindowAppearance) provides the translucent fill uniformly. Adding
+        // another tinted layer here would make the sidebar read darker than
+        // the surrounding strip.
         .safeAreaInset(edge: .bottom) {
             Button {
                 openProject()

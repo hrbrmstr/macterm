@@ -33,14 +33,15 @@ final class MactermConfig {
         var lines: [String] = []
 
         // --- Macterm-managed window appearance ---
-        // Hand ghostty a fully-transparent terminal surface (background-opacity
-        // = 0). Ghostty draws only the text and cursor; the colored fill behind
-        // the text comes from Macterm's bgWithOpacity SwiftUI layer, which is
-        // the single source of window translucency. This avoids the double-tint
-        // that happens when both ghostty's renderer and SwiftUI tint the same
-        // pixels.
+        // Ghostty's terminal surface is fully transparent — it draws only the
+        // text and cursor. The colored fill behind the text comes from the
+        // window's `NSWindow.backgroundColor` (set in `WindowAppearance.sync`
+        // to the terminal color tinted by `Preferences.windowOpacity`), which
+        // is the single source of window translucency. Keeping all tinting on
+        // one layer avoids the double-paint that happens when both ghostty's
+        // renderer and SwiftUI/AppKit tint the same pixels.
         lines.append("background-opacity = 0")
-        // We drive window blur ourselves via the CGS SPI, not ghostty's wrapper.
+        // Blur is driven by our own CGS SPI call, not ghostty's wrapper.
         lines.append("background-blur = 0")
 
         // --- User-configurable via Settings UI ---

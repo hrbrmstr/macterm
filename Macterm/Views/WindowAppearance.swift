@@ -77,10 +77,12 @@ enum WindowAppearance {
 
         if effectiveTransparent {
             window.isOpaque = false
-            // The 0.001-alpha-white trick is from Ghostty: `.clear` gets
-            // special-cased somewhere in AppKit and produces a visibly
-            // different composite. The near-zero alpha works around it.
-            window.backgroundColor = .white.withAlphaComponent(0.001)
+            // The window's backgroundColor is the *only* tinted layer.
+            // Ghostty renders fully transparent, the detail ZStack and
+            // sidebar paint nothing, so the whole interior — including the
+            // strip around the system glass sidebar — reads as one
+            // continuous translucent surface backed by this color.
+            window.backgroundColor = bg.withAlphaComponent(opacity)
             // Apply blur unconditionally; passing 0 clears any previous blur.
             setWindowBackgroundBlur(window, radius: blurRadius)
         } else {
