@@ -73,6 +73,14 @@ enum WindowAppearance {
 
         if let titlebarView = container.firstDescendant(withClassName: "NSTitlebarView") {
             titlebarView.wantsLayer = true
+            // On Tahoe with liquid glass, the NavigationSplitView's sidebar
+            // is a system glass surface that extends behind the titlebar by
+            // design. Painting a flat color over the titlebar covers that
+            // glass and creates a visible break across the sidebar. Instead,
+            // leave the titlebar transparent and let the system materials
+            // (glass sidebar on one side, detail view's painted bg on the
+            // other) show through. In the opaque case we still fill so the
+            // titlebar matches the terminal background.
             titlebarView.layer?.backgroundColor = isTransparent
                 ? NSColor.clear.cgColor
                 : bg.cgColor

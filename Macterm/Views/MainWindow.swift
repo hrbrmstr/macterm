@@ -15,7 +15,8 @@ struct MainWindow: View {
                 .navigationSplitViewColumnWidth(min: 140, ideal: 180, max: 280)
         } detail: {
             ZStack {
-                MactermTheme.terminalBg
+                MactermTheme.bgWithOpacity
+                    .ignoresSafeArea(.container, edges: .top)
                 if let project = activeProjectWithWorkspace {
                     if projectHasAnyTab(project) {
                         WorkspaceView(project: project)
@@ -253,6 +254,11 @@ private struct WindowStyler: NSViewRepresentable {
             window.titlebarAppearsTransparent = true
             window.titlebarSeparatorStyle = .none
             window.tabbingMode = .disallowed
+            // Let the content view extend under the titlebar so the sidebar
+            // and terminal paint continuously up to the top of the window.
+            // Without this the titlebar floats above the sidebar with a
+            // visible boundary, which is jarring when both are translucent.
+            window.styleMask.insert(.fullSizeContentView)
             WindowAppearance.sync(window: window)
             context.coordinator.observe(window: window)
             // Intercept the close button to hide instead of close,
