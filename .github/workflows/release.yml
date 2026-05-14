@@ -20,8 +20,6 @@ jobs:
 
       - name: Setup GhosttyKit
         run: mise run ci:setup
-        env:
-          GH_TOKEN: ${{ secrets.GH_PAT }}
 
       - name: Build universal release artifact
         env:
