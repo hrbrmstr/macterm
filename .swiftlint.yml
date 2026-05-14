@@ -2,7 +2,7 @@ included:
   - Macterm
 
 excluded:
-  - .build
+  - build
   - GhosttyKit
   - Tests
 
