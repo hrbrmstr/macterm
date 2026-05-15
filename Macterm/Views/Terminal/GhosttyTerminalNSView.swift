@@ -13,6 +13,7 @@ final class GhosttyTerminalNSView: NSView {
 
     nonisolated(unsafe) private(set) var surface: ghostty_surface_t?
     private let workingDirectory: String
+    private let initialCommand: String?
     var onTitleChange: ((String) -> Void)?
     var onFocus: (() -> Void)?
     var onProcessExit: (() -> Void)?
@@ -31,8 +32,9 @@ final class GhosttyTerminalNSView: NSView {
     private var keyTextAccumulator: [String] = []
     private var currentKeyEvent: NSEvent?
 
-    init(workingDirectory: String) {
+    init(workingDirectory: String, initialCommand: String? = nil) {
         self.workingDirectory = workingDirectory
+        self.initialCommand = initialCommand
         super.init(frame: .zero)
         wantsLayer = true
         setupTrackingArea()
@@ -83,9 +85,23 @@ final class GhosttyTerminalNSView: NSView {
         config.scale_factor = Double(window?.backingScaleFactor ?? 2.0)
         config.context = GHOSTTY_SURFACE_CONTEXT_SPLIT
 
+        // Nest withCString so both pointers stay valid through
+        // ghostty_surface_new. libghostty copies the strings before the call
+        // returns, so the nesting only matters during the call itself.
         workingDirectory.withCString { cwd in
             config.working_directory = cwd
-            surface = ghostty_surface_new(app, &config)
+            if let cmd = initialCommand {
+                // Wait for user input before closing the surface when the
+                // command exits — otherwise the tab vanishes the instant the
+                // editor quits, which is jarring.
+                config.wait_after_command = true
+                cmd.withCString { cmdPtr in
+                    config.command = cmdPtr
+                    surface = ghostty_surface_new(app, &config)
+                }
+            } else {
+                surface = ghostty_surface_new(app, &config)
+            }
         }
         guard let surface else { return }
 
