@@ -16,7 +16,7 @@
 - **Split Panes**: Unlimited horizontal and vertical splits, with optional auto-tiling.
 - **Persistence**: Projects, tabs, and panes are saved and restored automatically.
 - **Quick terminal**: Global terminal accessible from anywhere.
-- **Configurable via your ghostty.conf**: Macterm reads your existing `~/.config/ghostty/config`. Theme, font, palette, keybinds — all of it just works.
+- **Configurable via ghostty config**: Macterm reads your existing `~/.config/ghostty/config`. Theme, font, palette, keybinds — all of it just works.
 - **Command Palette**: Versatile command palette to interact with multiplexing (open, delete, and search projects)
 
 ## Install
@@ -47,7 +47,7 @@ If your config lives somewhere else, point Macterm at it in **Settings → Appea
 
 ### What's different from Ghostty.app
 
-A handful of settings either don't apply or are overridden, because Macterm renders some of the chrome itself instead of letting ghostty do it. If you have these in your ghostty.conf, they'll be parsed without errors but won't change anything in Macterm:
+A handful of settings either don't apply or are overridden, because Macterm renders some of the chrome itself instead of letting ghostty do it. If you have these in your ghostty config, they'll be parsed without errors but won't change anything in Macterm:
 
 | Setting                                                         | Status          | Why                                                                                                                              |
 | --------------------------------------------------------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------- |
@@ -67,11 +67,11 @@ Most of your `keybind = ...` lines in ghostty config work the same as in Ghostty
 
 Every conflicting combo is rebindable in **Settings → Keymaps**, so if you'd rather a particular shortcut belong to your ghostty config, clear or remap it there.
 
-One caveat: ghostty keybinds that drive *app-level* actions (`new_split`, `new_tab`, `goto_tab`, `goto_split`, etc.) currently do nothing in Macterm — Macterm only triggers those actions through its own keybinds in **Settings → Keymaps**. Terminal-level ghostty bindings (copy/paste, scroll, font size, etc.) work normally.
+One caveat: ghostty keybinds that drive _app-level_ actions (`new_split`, `new_tab`, `goto_tab`, `goto_split`, etc.) currently do nothing in Macterm — Macterm only triggers those actions through its own keybinds in **Settings → Keymaps**. Terminal-level ghostty bindings (copy/paste, scroll, font size, etc.) work normally.
 
 ### First-launch defaults
 
-If you don't have a `~/.config/ghostty/config`, Macterm starts with the Rose Pine theme at 16pt, 16px window padding, and `macos-option-as-alt = true` (so Option+letter sends Alt to your shell instead of typing special characters). Everything else falls through to ghostty's own defaults. Any of these can be overridden by adding the corresponding line to your ghostty.conf.
+If you don't have a `~/.config/ghostty/config`, Macterm starts with the Rose Pine theme at 16pt, 16px window padding, and `macos-option-as-alt = true` (so Option+letter sends Alt to your shell instead of typing special characters). Everything else falls through to ghostty's own defaults. Any of these can be overridden by adding the corresponding line to your ghostty config.
 
 ## Demos
 
@@ -83,7 +83,7 @@ https://github.com/user-attachments/assets/42b2dce8-1d6d-41d6-a4c8-2e0c1339810b
 
 ### Window Opacity & Blur
 
-Macterm's appearance is highly customizable and hot-reloaded.
+Macterm's window appearance is highly customizable and hot-reloaded.
 
 https://github.com/user-attachments/assets/1486ed55-e653-43ce-98aa-232a61d234a7
 
