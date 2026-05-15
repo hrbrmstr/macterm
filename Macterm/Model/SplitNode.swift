@@ -9,10 +9,6 @@ enum SplitPosition { case first, second }
 final class Pane: Identifiable {
     let id = UUID()
     let projectPath: String
-    /// Optional command to run instead of the user's shell. Used for one-off
-    /// "open this in $EDITOR" tabs. When the command exits, the pane's
-    /// process-exit callback fires the same as a shell exit.
-    let initialCommand: String?
     var title: String = "Terminal"
     let searchState = TerminalSearchState()
 
@@ -27,7 +23,7 @@ final class Pane: Identifiable {
 
     func ensureNSView() -> GhosttyTerminalNSView {
         if let existing = _nsView { return existing }
-        let view = GhosttyTerminalNSView(workingDirectory: projectPath, initialCommand: initialCommand)
+        let view = GhosttyTerminalNSView(workingDirectory: projectPath)
         _nsView = view
         return view
     }
@@ -86,9 +82,8 @@ final class Pane: Identifiable {
         token.allSatisfy { !$0.isLetter && !$0.isNumber }
     }
 
-    init(projectPath: String, initialCommand: String? = nil) {
+    init(projectPath: String) {
         self.projectPath = projectPath
-        self.initialCommand = initialCommand
     }
 }
 

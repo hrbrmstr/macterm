@@ -8,7 +8,9 @@ struct SettingsView: View {
             AppearanceSettings()
                 .tabItem { Label("Appearance", systemImage: "paintbrush") }
             QuickTerminalSettings()
-                .tabItem { Label("Quick Terminal", systemImage: "rectangle.bottomthird.inset.filled") }
+                .tabItem {
+                    Label("Quick Terminal", systemImage: "rectangle.bottomthird.inset.filled")
+                }
             KeymapSettings()
                 .tabItem { Label("Keymaps", systemImage: "keyboard") }
             UpdatesSettings()
@@ -21,10 +23,6 @@ struct SettingsView: View {
 // MARK: - Appearance
 
 private struct AppearanceSettings: View {
-    @Environment(AppState.self)
-    private var appState
-    @Environment(ProjectStore.self)
-    private var projectStore
     @AppStorage(Preferences.Keys.autoTiling)
     private var autoTilingEnabled = false
     @State
@@ -38,9 +36,11 @@ private struct AppearanceSettings: View {
         Form {
             Section("Ghostty Config") {
                 HStack {
-                    TextField("Path", text: $ghosttyConfigPath, prompt: Text("~/.config/ghostty/config"))
-                        .textFieldStyle(.roundedBorder)
-                        .onSubmit { commitPath() }
+                    TextField(
+                        "Path", text: $ghosttyConfigPath, prompt: Text("~/.config/ghostty/config")
+                    )
+                    .textFieldStyle(.roundedBorder)
+                    .onSubmit { commitPath() }
                     Button("Browse…") { browse() }
                     Button("Reset") {
                         ghosttyConfigPath = "~/.config/ghostty/config"
@@ -53,15 +53,10 @@ private struct AppearanceSettings: View {
                         commitPath()
                         reloadAndReport()
                     }
-                    .help("Re-read your ghostty.conf. Click after saving external edits.")
-                    Button("Edit Ghostty Config") {
-                        commitPath()
-                        appState.openGhosttyConfigEditor(projectStore: projectStore)
-                    }
-                    .disabled(ghosttyConfigPath.isEmpty)
+                    .help("Re-read your Ghostty config. Click after saving external edits.")
                 }
                 Text(
-                    "Your ghostty.conf controls theme, font, palette, keybinds, and most other terminal settings. "
+                    "Your Ghostty config controls theme, font, palette, keybinds, and most other terminal settings. "
                         + "Macterm provides defaults; anything in your ghostty.conf overrides them. "
                         + "Macterm does not auto-detect external edits — click Reload after saving."
                 )
@@ -136,9 +131,10 @@ private struct AppearanceSettings: View {
         guard !lines.isEmpty else { return }
 
         let alert = NSAlert()
-        alert.messageText = result.missingUserConfigPath != nil
-            ? "Ghostty config not found"
-            : "Issues in your ghostty.conf"
+        alert.messageText =
+            result.missingUserConfigPath != nil
+                ? "Ghostty config not found"
+                : "Issues in your ghostty.conf"
         alert.informativeText = lines.joined(separator: "\n\n")
         alert.alertStyle = result.missingUserConfigPath != nil ? .warning : .informational
         alert.addButton(withTitle: "OK")
@@ -228,10 +224,14 @@ private struct KeymapSettings: View {
                             HotkeyCaptureState.shared.isCapturing = true
                             capturingActionID = action.id
                         } label: {
-                            Text(capturingActionID == action.id ? "Press keys..." : HotkeyRegistry
-                                .displayString(for: values[action.id] ?? "disabled"))
-                                .font(.system(size: 12, design: .monospaced))
-                                .frame(width: 140, alignment: .leading)
+                            Text(
+                                capturingActionID == action.id
+                                    ? "Press keys..."
+                                    : HotkeyRegistry
+                                    .displayString(for: values[action.id] ?? "disabled")
+                            )
+                            .font(.system(size: 12, design: .monospaced))
+                            .frame(width: 140, alignment: .leading)
                         }
                         .buttonStyle(.bordered)
 
@@ -365,9 +365,11 @@ private struct UpdatesSettings: View {
                     .disabled(!updater.canCheckForUpdates)
                 }
 
-                Text("Updates are verified with an EdDSA signature. Macterm does not collect analytics.")
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
+                Text(
+                    "Updates are verified with an EdDSA signature. Macterm does not collect analytics."
+                )
+                .font(.caption)
+                .foregroundStyle(.secondary)
             }
 
             Section("Version") {

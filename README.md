@@ -16,7 +16,7 @@
 - **Split Panes**: Unlimited horizontal and vertical splits, with optional auto-tiling.
 - **Persistence**: Projects, tabs, and panes are saved and restored automatically.
 - **Quick terminal**: Global terminal accessible from anywhere.
-- **Configurable via ghostty config**: Macterm reads your existing `~/.config/ghostty/config`. Theme, font, palette, keybinds — all of it just works.
+- **Configurable via Ghostty config**: Macterm reads your existing `~/.config/ghostty/config`. Theme, font, palette, keybinds — all of it just works.
 - **Command Palette**: Versatile command palette to interact with multiplexing (open, delete, and search projects)
 
 ## Install
@@ -41,13 +41,13 @@ xattr -cr /Applications/Macterm.app
 
 ## For Ghostty Users
 
-Macterm uses libghostty as its terminal engine and reads your existing `~/.config/ghostty/config` on launch. Themes, fonts, palettes, keybinds, scrollback, cursor style, shell integration, mouse behavior — everything ghostty supports works the same in Macterm.
+Macterm uses libghostty as its terminal engine and reads your existing `~/.config/ghostty/config` on launch. Themes, fonts, palettes, keybinds, scrollback, cursor style, shell integration, mouse behavior — everything Ghostty supports works the same in Macterm.
 
-If your config lives somewhere else, point Macterm at it in **Settings → Appearance → Ghostty Config**. You can also click **Edit Ghostty Config** to open it in `$EDITOR` (default `vi`) inside a Macterm tab, and **Reload** to pick up external edits without restarting.
+If your config lives somewhere else, point Macterm at it in **Settings → Appearance → Ghostty Config**. Click **Reload** there after saving external edits — Macterm doesn't auto-detect them.
 
 ### What's different from Ghostty.app
 
-A handful of settings either don't apply or are overridden, because Macterm renders some of the chrome itself instead of letting ghostty do it. If you have these in your ghostty config, they'll be parsed without errors but won't change anything in Macterm:
+A handful of settings either don't apply or are overridden, because Macterm renders some of the chrome itself instead of letting Ghostty do it. If you have these in your Ghostty config, they'll be parsed without errors but won't change anything in Macterm:
 
 | Setting                                                         | Status          | Why                                                                                                                              |
 | --------------------------------------------------------------- | --------------- | -------------------------------------------------------------------------------------------------------------------------------- |
@@ -59,19 +59,19 @@ A handful of settings either don't apply or are overridden, because Macterm rend
 | `macos-titlebar-*`, `macos-window-buttons`, `window-decoration` | Ignored         | Macterm has its own titlebar implementation.                                                                                     |
 | `quick-terminal-*` family                                       | Ignored         | Macterm has its own quick terminal. Size lives in **Settings → Quick Terminal**.                                                 |
 
-Macterm-specific settings (window opacity/blur, quick terminal dimensions, hotkeys, auto-tile) live in **Macterm → Settings**. Everything else belongs in your ghostty.conf.
+Macterm-specific settings (window opacity/blur, quick terminal dimensions, hotkeys, auto-tile) live in **Macterm → Settings**. Everything else belongs in your Ghostty config.
 
 ### Keybinds
 
-Most of your `keybind = ...` lines in ghostty config work the same as in Ghostty.app. The one rule to know: **on conflict, Macterm wins.** If a keystroke matches one of Macterm's app-level shortcuts (new tab, splits, focus moves, command palette, etc.), Macterm handles it and ghostty never sees the event. If it doesn't conflict, the keystroke flows through to libghostty and your ghostty `keybind` fires normally — including ghostty's defaults like `cmd+shift+c` (copy) and `cmd+shift+v` (paste).
+Most of your `keybind = ...` lines in Ghostty config work the same as in Ghostty.app. The one rule to know: **on conflict, Macterm wins.** If a keystroke matches one of Macterm's app-level shortcuts (new tab, splits, focus moves, command palette, etc.), Macterm handles it and Ghostty never sees the event. If it doesn't conflict, the keystroke flows through to libghostty and your Ghostty `keybind` fires normally.
 
-Every conflicting combo is rebindable in **Settings → Keymaps**, so if you'd rather a particular shortcut belong to your ghostty config, clear or remap it there.
+Every conflicting combo is rebindable in **Settings → Keymaps**, so if you'd rather a particular shortcut belong to your Ghostty config, clear or remap it there.
 
-One caveat: ghostty keybinds that drive _app-level_ actions (`new_split`, `new_tab`, `goto_tab`, `goto_split`, etc.) currently do nothing in Macterm — Macterm only triggers those actions through its own keybinds in **Settings → Keymaps**. Terminal-level ghostty bindings (copy/paste, scroll, font size, etc.) work normally.
+One caveat: Ghostty keybinds that drive _app-level_ actions (`new_split`, `new_tab`, `goto_tab`, `goto_split`, etc.) currently do nothing in Macterm — Macterm only triggers those actions through its own keybinds in **Settings → Keymaps**. Terminal-level Ghostty bindings (copy/paste, scroll, font size, etc.) work normally.
 
 ### First-launch defaults
 
-If you don't have a `~/.config/ghostty/config`, Macterm starts with the Rose Pine theme at 16pt, 16px window padding, and `macos-option-as-alt = true` (so Option+letter sends Alt to your shell instead of typing special characters). Everything else falls through to ghostty's own defaults. Any of these can be overridden by adding the corresponding line to your ghostty config.
+If you don't have a `~/.config/ghostty/config`, Macterm starts with the Rose Pine theme at 16pt, 16px window padding, and `macos-option-as-alt = true` (so Option+letter sends Alt to your shell instead of typing special characters). Everything else falls through to Ghostty's own defaults. Any of these can be overridden by adding the corresponding line to your Ghostty config.
 
 ## Demos
 
